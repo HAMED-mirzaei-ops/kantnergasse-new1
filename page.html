@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 7.6.7.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.5in 11in; margin: 0.79in }
+		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Button } from &quot;@/components/ui/button&quot;
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from &quot;@/components/ui/card&quot;
+import { Input } from &quot;@/components/ui/input&quot;
+import { Textarea } from &quot;@/components/ui/textarea&quot;
+import { Slider } from &quot;@/components/ui/slider&quot;
+import { Label } from &quot;@/components/ui/label&quot;
+import { MapPin, Download, Phone, Mail, ChevronRight, Euro, FileText } from 'lucide-react'
+
+type Apartment = {
+  id: number;
+  rooms: number;
+  size: number;
+  price: number;
+  description: string;
+}
+
+export default function BauprojektSeite() {
+  const [priceRange, setPriceRange] = useState([200000, 800000])
+  const [roomRange, setRoomRange] = useState([1, 6])
+  const [sizeRange, setSizeRange] = useState([50, 150])
+
+  const apartments: Apartment[] = Array.from({ length: 20 }, (_, i) =&gt; ({
+    id: i + 1,
+    rooms: Math.floor(Math.random() * (6 - 1 + 1) + 1),
+    size: Math.floor(Math.random() * (150 - 50 + 1) + 50),
+    price: Math.floor(Math.random() * (800000 - 200000 + 1) + 200000),
+    description: `${i % 3 === 0 ? &quot;Geräumige&quot; : i % 3 === 1 ? &quot;Moderne&quot; : &quot;Elegante&quot;} Wohnung mit ${i % 2 === 0 ? &quot;Balkon&quot; : &quot;Terrasse&quot;}.`
+  }))
+
+  const filteredApartments = apartments.filter(
+    apt =&gt; apt.price &gt;= priceRange[0] &amp;&amp; apt.price &lt;= priceRange[1] &amp;&amp;
+           apt.rooms &gt;= roomRange[0] &amp;&amp; apt.rooms &lt;= roomRange[1] &amp;&amp;
+           apt.size &gt;= sizeRange[0] &amp;&amp; apt.size &lt;= sizeRange[1]
+  )
+
+  return (
+    &lt;div className=&quot;flex flex-col min-h-screen&quot;&gt;
+      &lt;header className=&quot;sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60&quot;&gt;
+        &lt;div className=&quot;container flex h-14 items-center&quot;&gt;
+          &lt;Link href=&quot;/&quot; className=&quot;flex items-center space-x-2&quot;&gt;
+            &lt;Image src=&quot;/logo.svg&quot; alt=&quot;Logo&quot; width={32} height={32} /&gt;
+            &lt;span className=&quot;font-bold&quot;&gt;Bauprojekt Kantnergasse&lt;/span&gt;
+          &lt;/Link&gt;
+          &lt;nav className=&quot;ml-auto flex gap-4 sm:gap-6&quot;&gt;
+            &lt;Link href=&quot;#projekt&quot; className=&quot;text-sm font-medium hover:underline underline-offset-4&quot;&gt;Projekt&lt;/Link&gt;
+            &lt;Link href=&quot;#wohnungen&quot; className=&quot;text-sm font-medium hover:underline underline-offset-4&quot;&gt;Wohnungen&lt;/Link&gt;
+            &lt;Link href=&quot;#lage&quot; className=&quot;text-sm font-medium hover:underline underline-offset-4&quot;&gt;Lage&lt;/Link&gt;
+            &lt;Link href=&quot;#kontakt&quot; className=&quot;text-sm font-medium hover:underline underline-offset-4&quot;&gt;Kontakt&lt;/Link&gt;
+          &lt;/nav&gt;
+        &lt;/div&gt;
+      &lt;/header&gt;
+
+      &lt;main className=&quot;flex-1&quot;&gt;
+        &lt;section id=&quot;projekt&quot; className=&quot;py-12 md:py-24 lg:py-32&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;div className=&quot;grid gap-6 lg:grid-cols-2 lg:gap-12 items-center&quot;&gt;
+              &lt;Image src=&quot;/placeholder.svg&quot; alt=&quot;Projekt Hero Bild&quot; width={600} height={400} className=&quot;rounded-lg object-cover&quot; /&gt;
+              &lt;div className=&quot;space-y-4&quot;&gt;
+                &lt;h1 className=&quot;text-3xl font-bold tracking-tighter sm:text-5xl&quot;&gt;Bauprojekt Kantnergasse 44&lt;/h1&gt;
+                &lt;p className=&quot;text-muted-foreground&quot;&gt;
+                  Erleben Sie modernes Wohnen in unserem neuesten Bauprojekt in der Kantnergasse 44. Entworfen mit Komfort und Stil im Sinn,
+                  bieten unsere 20 einzigartigen Wohnungen die perfekte Mischung aus Luxus und Funktionalität.
+                &lt;/p&gt;
+                &lt;Button&gt;Mehr erfahren&lt;/Button&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section id=&quot;wohnungen&quot; className=&quot;py-12 md:py-24 lg:py-32 bg-muted&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;h2 className=&quot;text-3xl font-bold tracking-tighter sm:text-4xl mb-8&quot;&gt;Verfügbare Wohnungen&lt;/h2&gt;
+            &lt;div className=&quot;mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3&quot;&gt;
+              &lt;div className=&quot;space-y-2&quot;&gt;
+                &lt;Label&gt;Preis (€)&lt;/Label&gt;
+                &lt;Slider
+                  min={200000}
+                  max={800000}
+                  step={10000}
+                  value={priceRange}
+                  onValueChange={setPriceRange}
+                /&gt;
+                &lt;div className=&quot;flex justify-between text-sm text-muted-foreground&quot;&gt;
+                  &lt;span&gt;{priceRange[0].toLocaleString()} €&lt;/span&gt;
+                  &lt;span&gt;{priceRange[1].toLocaleString()} €&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;space-y-2&quot;&gt;
+                &lt;Label&gt;Zimmeranzahl&lt;/Label&gt;
+                &lt;Slider
+                  min={1}
+                  max={6}
+                  step={1}
+                  value={roomRange}
+                  onValueChange={setRoomRange}
+                /&gt;
+                &lt;div className=&quot;flex justify-between text-sm text-muted-foreground&quot;&gt;
+                  &lt;span&gt;{roomRange[0]} Zimmer&lt;/span&gt;
+                  &lt;span&gt;{roomRange[1]} Zimmer&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;space-y-2&quot;&gt;
+                &lt;Label&gt;Größe (m²)&lt;/Label&gt;
+                &lt;Slider
+                  min={50}
+                  max={150}
+                  step={5}
+                  value={sizeRange}
+                  onValueChange={setSizeRange}
+                /&gt;
+                &lt;div className=&quot;flex justify-between text-sm text-muted-foreground&quot;&gt;
+                  &lt;span&gt;{sizeRange[0]} m²&lt;/span&gt;
+                  &lt;span&gt;{sizeRange[1]} m²&lt;/span&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;div className=&quot;grid gap-6 sm:grid-cols-2 lg:grid-cols-3&quot;&gt;
+              {filteredApartments.map((wohnung) =&gt; (
+                &lt;Card key={wohnung.id}&gt;
+                  &lt;CardHeader&gt;
+                    &lt;CardTitle&gt;Wohnung {wohnung.id}&lt;/CardTitle&gt;
+                  &lt;/CardHeader&gt;
+                  &lt;CardContent&gt;
+                    &lt;Image src=&quot;/placeholder.svg&quot; alt={`Wohnung ${wohnung.id}`} width={300} height={200} className=&quot;rounded-lg object-cover mb-4&quot; /&gt;
+                    &lt;div className=&quot;space-y-2&quot;&gt;
+                      &lt;p className=&quot;text-sm text-muted-foreground&quot;&gt;{wohnung.description}&lt;/p&gt;
+                      &lt;p className=&quot;flex items-center&quot;&gt;&lt;Euro className=&quot;mr-2 h-4 w-4&quot; /&gt; Preis: {wohnung.price.toLocaleString()} €&lt;/p&gt;
+                      &lt;p className=&quot;flex items-center&quot;&gt;&lt;MapPin className=&quot;mr-2 h-4 w-4&quot; /&gt; Größe: {wohnung.size} m²&lt;/p&gt;
+                      &lt;p className=&quot;flex items-center&quot;&gt;&lt;ChevronRight className=&quot;mr-2 h-4 w-4&quot; /&gt; Zimmer: {wohnung.rooms}&lt;/p&gt;
+                    &lt;/div&gt;
+                  &lt;/CardContent&gt;
+                  &lt;CardFooter className=&quot;flex flex-col space-y-2&quot;&gt;
+                    &lt;Button variant=&quot;outline&quot; className=&quot;w-full&quot;&gt;
+                      &lt;Download className=&quot;mr-2 h-4 w-4&quot; /&gt; Grundriss herunterladen
+                    &lt;/Button&gt;
+                    &lt;Button variant=&quot;outline&quot; className=&quot;w-full&quot;&gt;
+                      &lt;FileText className=&quot;mr-2 h-4 w-4&quot; /&gt; Exposé herunterladen
+                    &lt;/Button&gt;
+                  &lt;/CardFooter&gt;
+                &lt;/Card&gt;
+              ))}
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section id=&quot;lage&quot; className=&quot;py-12 md:py-24 lg:py-32&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;div className=&quot;grid gap-6 lg:grid-cols-2 lg:gap-12 items-center&quot;&gt;
+              &lt;div className=&quot;space-y-4&quot;&gt;
+                &lt;h2 className=&quot;text-3xl font-bold tracking-tighter sm:text-4xl&quot;&gt;Erstklassige Lage&lt;/h2&gt;
+                &lt;p className=&quot;text-muted-foreground&quot;&gt;
+                  Unser Projekt in der Kantnergasse 44 mit 20 exklusiven Wohnungen befindet sich im Herzen der Stadt und bietet einfachen Zugang zu öffentlichen Verkehrsmitteln,
+                  Einkaufszentren und Freizeiteinrichtungen.
+                &lt;/p&gt;
+                &lt;ul className=&quot;space-y-2&quot;&gt;
+                  &lt;li className=&quot;flex items-center&quot;&gt;&lt;MapPin className=&quot;mr-2 h-4 w-4&quot; /&gt; 5 Minuten zur nächsten U-Bahn-Station&lt;/li&gt;
+                  &lt;li className=&quot;flex items-center&quot;&gt;&lt;MapPin className=&quot;mr-2 h-4 w-4&quot; /&gt; 10 Minuten zur Innenstadt&lt;/li&gt;
+                  &lt;li className=&quot;flex items-center&quot;&gt;&lt;MapPin className=&quot;mr-2 h-4 w-4&quot; /&gt; Mehrere Parks in Gehweite&lt;/li&gt;
+                &lt;/ul&gt;
+              &lt;/div&gt;
+              &lt;div className=&quot;aspect-video bg-muted rounded-lg flex items-center justify-center&quot;&gt;
+                &lt;p className=&quot;text-muted-foreground&quot;&gt;Kartenplatzhalter&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+
+        &lt;section id=&quot;kontakt&quot; className=&quot;py-12 md:py-24 lg:py-32 bg-muted&quot;&gt;
+          &lt;div className=&quot;container&quot;&gt;
+            &lt;h2 className=&quot;text-3xl font-bold tracking-tighter sm:text-4xl mb-8&quot;&gt;Kontaktieren Sie uns&lt;/h2&gt;
+            &lt;div className=&quot;grid gap-6 lg:grid-cols-2 lg:gap-12&quot;&gt;
+              &lt;Card&gt;
+                &lt;CardHeader&gt;
+                  &lt;CardTitle&gt;Immobilienmakler&lt;/CardTitle&gt;
+                &lt;/CardHeader&gt;
+                &lt;CardContent className=&quot;flex items-center space-x-4&quot;&gt;
+                  &lt;Image src=&quot;/placeholder.svg&quot; alt=&quot;Immobilienmakler Foto&quot; width={100} height={100} className=&quot;rounded-full&quot; /&gt;
+                  &lt;div className=&quot;space-y-2&quot;&gt;
+                    &lt;p className=&quot;flex items-center&quot;&gt;&lt;Phone className=&quot;mr-2 h-4 w-4&quot; /&gt; +49 123 456 7890&lt;/p&gt;
+                    &lt;p className=&quot;flex items-center&quot;&gt;&lt;Mail className=&quot;mr-2 h-4 w-4&quot; /&gt; makler@beispiel.de&lt;/p&gt;
+                  &lt;/div&gt;
+                &lt;/CardContent&gt;
+              &lt;/Card&gt;
+              &lt;Card&gt;
+                &lt;CardHeader&gt;
+                  &lt;CardTitle&gt;Anfrageformular&lt;/CardTitle&gt;
+                &lt;/CardHeader&gt;
+                &lt;CardContent&gt;
+                  &lt;form className=&quot;space-y-4&quot;&gt;
+                    &lt;Input placeholder=&quot;Ihr Name&quot; /&gt;
+                    &lt;Input type=&quot;email&quot; placeholder=&quot;Ihre E-Mail&quot; /&gt;
+                    &lt;Input type=&quot;tel&quot; placeholder=&quot;Ihre Telefonnummer&quot; /&gt;
+                    &lt;Textarea placeholder=&quot;Ihre Nachricht&quot; /&gt;
+                    &lt;Button type=&quot;submit&quot;&gt;Anfrage senden&lt;/Button&gt;
+                  &lt;/form&gt;
+                &lt;/CardContent&gt;
+              &lt;/Card&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      &lt;/main&gt;
+
+      &lt;footer className=&quot;border-t&quot;&gt;
+        &lt;div className=&quot;container flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center&quot;&gt;
+          &lt;p className=&quot;text-xs text-muted-foreground&quot;&gt;
+            © {new Date().getFullYear()} Bauprojekt Kantnergasse. Alle Rechte vorbehalten.
+          &lt;/p&gt;
+          &lt;nav className=&quot;sm:ml-auto flex gap-4 sm:gap-6&quot;&gt;
+            &lt;Link href=&quot;#&quot; className=&quot;text-xs hover:underline underline-offset-4&quot;&gt;Nutzungsbedingungen&lt;/Link&gt;
+            &lt;Link href=&quot;#&quot; className=&quot;text-xs hover:underline underline-offset-4&quot;&gt;Datenschutz&lt;/Link&gt;
+          &lt;/nav&gt;
+        &lt;/div&gt;
+      &lt;/footer&gt;
+    &lt;/div&gt;
+  )
+}</pre>
+</body>
+</html>
